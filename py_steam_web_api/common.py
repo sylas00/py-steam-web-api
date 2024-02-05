@@ -1,5 +1,5 @@
-from steamapi.model import User, Game, Badge
-from steamapi.request import steam_request
+from .model import User, Game, Badge
+from .request import steam_request
 
 
 def generate_instance_list(class_name: str, result_list: list):
@@ -52,11 +52,6 @@ class _User:
         badge_list = result_dict.get("response", {}).get("badges")
 
         return generate_instance_list("Badge", badge_list)
-
-    def get_account_public_info(self, steamid: str):
-        result_dict = steam_request.request("get", "IGameServersService", "GetAccountPublicInfo", 1, key=self.key,
-                                            steamid=steamid)
-        print(result_dict)
 
 
 class _Game:

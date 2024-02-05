@@ -1,4 +1,4 @@
-from steamapi.common import _User, _Game, _UserStats
+from .common import _User, _Game, _UserStats
 
 
 class SteamApi:
