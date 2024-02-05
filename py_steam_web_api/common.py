@@ -22,7 +22,7 @@ class _User:
     def __init__(self, key):
         self.key = key
 
-    def get_friends(self, steamid: str) -> list[User]:
+    def get_friends(self, steamid: int) -> list[User]:
         users_dict = steam_request.request("get", "ISteamUser", "GetFriendList", 1, key=self.key, steamid=steamid,
                                            relationship="friend")
         users_dict_list = users_dict.get("friendslist", {}).get("friends", [])
@@ -33,20 +33,20 @@ class _User:
             users.append(u)
         return users
 
-    def get_user_info(self, steamid: str) -> User:
+    def get_user_info(self, steamid: int) -> User:
         result_dict = steam_request.request("get", "ISteamUser", "GetPlayerSummaries", 2, key=self.key,
                                             steamids=steamid)
         user_list = result_dict.get("response", {}).get("players", [])
         return generate_instance_list("User", user_list)[0]
 
-    def get_level(self, steamid) -> int:
+    def get_level(self, steamid: int) -> int:
         result_dict = steam_request.request("get", "IPlayerService", "GetSteamLevel", 1, key=self.key,
                                             steamid=steamid)
         level = result_dict.get("response", {}).get("player_level")
 
         return level
 
-    def get_badges(self, steamid) -> list[Badge]:
+    def get_badges(self, steamid: int) -> list[Badge]:
         result_dict = steam_request.request("get", "IPlayerService", "GetBadges", 1, key=self.key,
                                             steamid=steamid)
         badge_list = result_dict.get("response", {}).get("badges")
@@ -58,13 +58,13 @@ class _Game:
     def __init__(self, key):
         self.key = key
 
-    def get_recent_played_games(self, steamid: str) -> list[Game]:
+    def get_recent_played_games(self, steamid: int) -> list[Game]:
         result_dict = steam_request.request("get", "IPlayerService", "GetRecentlyPlayedGames", 1, key=self.key,
                                             steamid=steamid, )
         game_list = result_dict.get("response", {}).get("games", [])
         return generate_instance_list("Game", game_list)
 
-    def get_owned_games(self, steamid: str, include_appinfo=True) -> list[Game]:
+    def get_owned_games(self, steamid: int, include_appinfo=True) -> list[Game]:
         result_dict = steam_request.request("get", "IPlayerService", "GetOwnedGames", 1, key=self.key,
                                             steamid=steamid, include_appinfo=include_appinfo)
         game_list = result_dict.get("response", {}).get("games", [])
@@ -81,10 +81,10 @@ class _UserStats:
     def __init__(self, key):
         self.key = key
 
-    def get_global_achievement_percentages_for_app(self, gameid: int) -> list:
-        games = steam_request.request("get", "ISteamUserStats", "GetGlobalAchievementPercentagesForApp", 2,
-                                      gameid=gameid)
-        print(games)
+    # def get_global_achievement_percentages_for_app(self, gameid: int) -> list:
+    #     games = steam_request.request("get", "ISteamUserStats", "GetGlobalAchievementPercentagesForApp", 2,
+    #                                   gameid=gameid)
+    #     print(games)
 
     # def get_global_stats_for_game(self, appid: int, ) -> list:
     #     games = steam_request.request("get", "ISteamUserStats", "GetGlobalStatsForGame", 1,
